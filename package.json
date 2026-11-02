@@ -1,0 +1,30 @@
+{
+    "$schema": "https://www.schemastore.org/package.json",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "build": "vite build",
+        "dev": "vite"
+    },
+    "devDependencies": {
+        "@tailwindcss/vite": "^4.1.17",
+        "axios": "^1.11.0",
+        "concurrently": "^9.0.1",
+        "laravel-vite-plugin": "^2.0.0",
+        "sass": "^1.99.0",
+        "tailwindcss": "^4.1.17",
+        "vite": "^7.0.7"
+    },
+    "dependencies": {
+        "@popperjs/core": "^2.11.8",
+        "apexcharts": "^5.10.6",
+        "bootstrap": "^5.3.8",
+        "bootstrap-datepicker": "^1.10.1",
+        "bootstrap-select": "^1.13.18",
+        "intl-tel-input": "^27.0.10",
+        "jquery": "^3.7.1",
+        "magnific-popup": "^1.2.0",
+        "quill": "^2.0.2",
+        "slick-carousel": "^1.8.1"
+    }
+}

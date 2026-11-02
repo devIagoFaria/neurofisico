@@ -1,0 +1,338 @@
+.dashboard-profile-card .fi-section-content {
+    padding: 0;
+    padding-bottom: 35px;
+}
+
+.border.border-b {
+    border-top: none;
+    border-right: none;
+    border-left: none;
+}
+
+.fi-dropdown-list-item.disabled {
+    opacity: 0.5;
+    cursor: default;
+}
+
+.no-cancel .fi-select-input-value-remove-btn {
+    display: none !important;
+}
+
+.fls-display-on .fi-dropdown-panel.fls-dropdown-width {
+    left: auto !important;
+    right: 0;
+}
+
+html[dir="rtl"] .fls-dropdown-width .fi-dropdown-list-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.fi-wi-stats-overview-stat-label {
+    color: currentColor;
+    opacity: 0.8;
+    font-weight: 500;
+}
+
+.fi-wi-stats-overview-stat-value {
+    color: currentColor;
+    font-weight: 700;
+    font-size: 1.875rem;
+    line-height: 2.25rem;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.fi-wi-stats-overview-stat.upcoming-appointments {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(5, 150, 105, 0.15) 100%);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(16, 185, 129, 0.2);
+    border-radius: 20px;
+    box-shadow: 0 4px 16px rgba(16, 185, 129, 0.1),
+        inset 0 1px 2px rgba(255, 255, 255, 0.1),
+        inset 0 -1px 2px rgba(16, 185, 129, 0.08);
+    color: #059669;
+    position: relative;
+    overflow: hidden;
+    height: 110px;
+    display: flex;
+    flex-direction: column;
+}
+
+.dark .fi-wi-stats-overview-stat.upcoming-appointments {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.25) 0%, rgba(5, 150, 105, 0.35) 100%);
+    border: 1px solid rgba(16, 185, 129, 0.4);
+    box-shadow: 0 4px 16px rgba(16, 185, 129, 0.2),
+        inset 0 1px 2px rgba(255, 255, 255, 0.15),
+        inset 0 -1px 2px rgba(16, 185, 129, 0.15);
+    color: #10b981;
+}
+
+.fi-wi-stats-overview-stat.total-appointments {
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.1) 0%, rgba(217, 119, 6, 0.15) 100%);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(245, 158, 11, 0.2);
+    border-radius: 20px;
+    box-shadow: 0 4px 16px rgba(245, 158, 11, 0.1),
+        inset 0 1px 2px rgba(255, 255, 255, 0.1),
+        inset 0 -1px 2px rgba(245, 158, 11, 0.08);
+    color: #d97706;
+    transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    position: relative;
+    overflow: hidden;
+    height: 110px;
+    display: flex;
+    flex-direction: column;
+}
+
+.dark .fi-wi-stats-overview-stat.total-appointments {
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.25) 0%, rgba(217, 119, 6, 0.35) 100%);
+    border: 1px solid rgba(245, 158, 11, 0.4);
+    box-shadow: 0 4px 16px rgba(245, 158, 11, 0.2),
+        inset 0 1px 2px rgba(255, 255, 255, 0.15),
+        inset 0 -1px 2px rgba(245, 158, 11, 0.15);
+    color: #f59e0b;
+}
+
+.fi-wi-stats-overview-stat.today-appointments {
+    background: linear-gradient(135deg, rgba(236, 72, 153, 0.1) 0%, rgba(219, 39, 119, 0.15) 100%);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(236, 72, 153, 0.2);
+    border-radius: 20px;
+    box-shadow: 0 4px 12px rgba(236, 72, 153, 0.1);
+    color: #9d174d;
+    transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    position: relative;
+    overflow: hidden;
+    height: 110px;
+    display: flex;
+    flex-direction: column;
+}
+
+.dark .fi-wi-stats-overview-stat.today-appointments {
+    background: linear-gradient(135deg, rgba(236, 72, 153, 0.25) 0%, rgba(219, 39, 119, 0.35) 100%);
+    border: 1px solid rgba(236, 72, 153, 0.4);
+    box-shadow: 0 4px 16px rgba(236, 72, 153, 0.2);
+    color: #ec4899;
+}
+
+.fi-wi-stats-overview-stat.total-active-doctors {
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.1) 0%, rgba(29, 78, 216, 0.15) 100%);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(37, 99, 235, 0.2);
+    border-radius: 20px;
+    box-shadow: 0 4px 16px rgba(37, 99, 235, 0.1),
+        inset 0 1px 2px rgba(255, 255, 255, 0.1),
+        inset 0 -1px 2px rgba(37, 99, 235, 0.08);
+    color: #2563eb;
+    position: relative;
+    overflow: hidden;
+    height: 110px;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.dark .fi-wi-stats-overview-stat.total-active-doctors {
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.25) 0%, rgba(29, 78, 216, 0.35) 100%);
+    border: 1px solid rgba(37, 99, 235, 0.4);
+    box-shadow: 0 4px 16px rgba(37, 99, 235, 0.2),
+        inset 0 1px 2px rgba(255, 255, 255, 0.15),
+        inset 0 -1px 2px rgba(37, 99, 235, 0.15);
+    color: #3b82f6;
+}
+
+.fi-wi-stats-overview-stat.total-patients {
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(124, 58, 237, 0.15) 100%);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(139, 92, 246, 0.2);
+    border-radius: 20px;
+    box-shadow: 0 4px 16px rgba(139, 92, 246, 0.1),
+        inset 0 1px 2px rgba(255, 255, 255, 0.1),
+        inset 0 -1px 2px rgba(139, 92, 246, 0.08);
+    color: #7c3aed;
+    position: relative;
+    overflow: hidden;
+    height: 110px;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.dark .fi-wi-stats-overview-stat.total-patients {
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.25) 0%, rgba(124, 58, 237, 0.35) 100%);
+    border: 1px solid rgba(139, 92, 246, 0.4);
+    box-shadow: 0 4px 16px rgba(139, 92, 246, 0.2),
+        inset 0 1px 2px rgba(255, 255, 255, 0.15),
+        inset 0 -1px 2px rgba(139, 92, 246, 0.15);
+    color: #a78bfa;
+}
+
+
+
+.fi-wi-stats-overview-stat.total-live-consultations {
+    background: linear-gradient(135deg, rgba(6, 182, 212, 0.1) 0%, rgba(8, 145, 178, 0.15) 100%);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(6, 182, 212, 0.2);
+    border-radius: 20px;
+    box-shadow: 0 4px 16px rgba(6, 182, 212, 0.1),
+        inset 0 1px 2px rgba(255, 255, 255, 0.1),
+        inset 0 -1px 2px rgba(6, 182, 212, 0.08);
+    color: #0891b2;
+    position: relative;
+    overflow: hidden;
+    height: 110px;
+    display: flex;
+    flex-direction: column;
+    grid-column: 1 / -1; /* Full width */
+    transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.dark .fi-wi-stats-overview-stat.total-live-consultations {
+    background: linear-gradient(135deg, rgba(6, 182, 212, 0.25) 0%, rgba(8, 145, 178, 0.35) 100%);
+    border: 1px solid rgba(6, 182, 212, 0.4);
+    box-shadow: 0 4px 16px rgba(6, 182, 212, 0.2),
+        inset 0 1px 2px rgba(255, 255, 255, 0.15),
+        inset 0 -1px 2px rgba(6, 182, 212, 0.15);
+    color: #22d3ee;
+}
+
+@media (min-width: 1024px) and (max-width: 1280px) {
+    .fi-wi-stats-overview-stat.upcoming-appointments,
+    .fi-wi-stats-overview-stat.total-appointments,
+    .fi-wi-stats-overview-stat.today-appointments,
+    .fi-wi-stats-overview-stat.total-active-doctors,
+    .fi-wi-stats-overview-stat.total-patients,
+    .fi-wi-stats-overview-stat.total-live-consultations {
+        height: 130px !important;
+        padding: 1.25rem !important;
+    }
+}
+
+.dark .apexcharts-text.apexcharts-xaxis-label {
+    fill: white !important;
+}
+
+.fi-in-entry.fi-in-entry-has-inline-label.total-label {
+    display: flex;
+    justify-content: space-between;
+}
+
+#form\.data\.json_file-label .fi-fo-field-label-content {
+    color: black;
+}
+
+.dark .fi-ta-filters input.fi-input{
+    background-color: oklch(0.274 0.006 286.033);
+    color: var(--gray-200);
+}
+
+.fls-display-on {
+    top: 0 !important;
+    bottom: auto !important;
+    right: 0 !important;
+    left: auto !important;
+}
+
+.iti__search-icon{
+    display: none !important;
+}
+
+.custom-slot-buttons .fi-btn-group {
+    display: grid !important;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 10px;
+    width: 100%;
+}
+
+.custom-slot-buttons.full-width-slot .fi-btn-group {
+    display: flex !important;
+    justify-content: center !important;
+}
+
+.custom-slot-buttons.full-width-slot .fi-btn-group > * {
+    flex: 0 1 auto !important;
+    min-width: 300px;
+}
+
+.custom-slot-buttons .fi-btn {
+    width: 100% !important;
+    border-radius: 20px !important;
+    justify-content: center;
+    min-height: 44px;
+}
+
+.custom-slot-buttons label.fi-btn.fi-disabled.fi-color-danger {
+    background-color: rgb(239 68 68) !important;
+    border-color: rgb(239 68 68) !important;
+    color: white !important;
+    opacity: 1 !important;
+    cursor: not-allowed !important;
+}
+
+.dashboard-equal-height-tables > * {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    flex: 1;
+}
+
+.dashboard-equal-height-tables .fi-ta {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.dashboard-equal-height-tables .fi-ta-ctn {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.no-clear .fi-select-input-value-remove-btn {
+    display: none !important;
+}
+
+html[lang="ar"] .custom-time-slot-repeater table thead th {
+    text-align: right !important;
+}
+
+html:not([lang="ar"]) .custom-time-slot-repeater table thead th {
+    text-align: left !important;
+}
+
+.filament-tables-color-picker-column .rounded-md.cursor-pointer{
+    border: 1px solid black !important;
+}
+
+.dark .filament-tables-color-picker-column .rounded-md.cursor-pointer{
+    border: 1px solid white !important;
+}
+
+@media (min-width: 1024px) and (max-width: 1440px) {
+    .fi-main-ctn {
+        width: 0 !important;
+        min-width: 0 !important;
+        overflow-x: hidden;
+    }
+    .fi-main {
+        overflow-x: auto;
+    }
+    .fi-ta-ctn {
+        overflow-x: auto !important;
+        max-width: 100%;
+    }
+    .fi-sidebar {
+        overflow-y: auto;
+    }
+    .fi-sidebar-nav {
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+    }
+}
