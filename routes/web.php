@@ -81,7 +81,7 @@ Route::get('login/google/callback', [GoogleCalendarController::class, 'redirect'
     ->name('googleCalendarCallback');
 
 Route::middleware('setLanguage')->group(function () {
-    //Route::get('/', [FrontController::class, 'medical'])->name('medical');
+    Route::get('/', [FrontController::class, 'medical'])->name('medical');
     Route::get('/medical-about-us', [FrontController::class, 'medicalAboutUs'])->name('medicalAboutUs');
     Route::get('/medical-services', [FrontController::class, 'medicalServices'])->name('medicalServices');
     Route::get('/medical-appointment', [FrontController::class, 'medicalAppointment'])->name('medicalAppointment');
