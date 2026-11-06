@@ -27,8 +27,10 @@ class FrontController extends AppBaseController
     /**
      * @return Application|Factory|View
      */
-    public function medical(): \Illuminate\View\View
+    public function medical(): \Illuminate\Http\RedirectResponse|\Illuminate\View\View
     {
+        return redirect('/login');
+
         $doctors = Doctor::with('user', 'specializations')->whereHas('user', function (Builder $query) {
             $query->where('status', User::ACTIVE);
         })->latest()->take(10)->get()->pluck('user.full_name', 'id');

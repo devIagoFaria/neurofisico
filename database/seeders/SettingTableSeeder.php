@@ -15,7 +15,7 @@ class SettingTableSeeder extends Seeder
         $logoUrl = asset('assets/image/neurofisico-logo.png');
         $favicon = asset('assets/image/neurofisico-favicon.ico');
 
-        Setting::create(['key' => 'clinic_name', 'value' => 'Clinic Appointment Management']);
+        Setting::create(['key' => 'clinic_name', 'value' => 'Clinica Neurofisico']);
         Setting::create(['key' => 'contact_no', 'value' => '1234567890']);
         Setting::create(['key' => 'email', 'value' => 'infycare@email.com']);
         Setting::create(['key' => 'specialities', 'value' => '1']);
