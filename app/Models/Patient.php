@@ -246,6 +246,11 @@ class Patient extends Model implements HasMedia
             ->singleFile();
     }
 
+    public function medicalRecords(): HasMany
+    {
+        return $this->hasMany(MedicalRecord::class);
+    }
+
     public static function schema(): array
     {
         return [

@@ -17,6 +17,7 @@ use Filament\Schemas\Components\Livewire;
 use Filament\Schemas\Components\Tabs\Tab;
 use Filament\Infolists\Components\TextEntry;
 use App\Livewire\PatientAppointmentRelationTable;
+use App\Livewire\PatientMedicalRecordTable;
 use App\Filament\Resources\Patients\PatientResource;
 use Ysfkaya\FilamentPhoneInput\Infolists\PhoneEntry;
 use Filament\Infolists\Components\SpatieMediaLibraryImageEntry;
@@ -166,8 +167,10 @@ class ViewPatient extends ViewRecord
                         Tab::make(__('messages.appointments'))->schema([
                             Livewire::make(PatientAppointmentRelationTable::class),
                         ]),
-                        Tab::make(__('Prontuario'))->schema([
-                            Livewire::make(PatientAppointmentRelationTable::class),
+                        Tab::make('Prontuário')->schema([
+                            Livewire::make(PatientMedicalRecordTable::class, [
+                                'patientId' => $this->getRecord()->patient->id,
+                            ]),
                         ]),
                     ])->columnSpanFull(),
             ]);

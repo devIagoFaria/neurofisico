@@ -171,6 +171,11 @@ class ViewPatient extends ViewRecord
                         Tab::make(__('messages.appointments'))->schema([
                             Livewire::make(PatientAppointmentRelationTable::class),
                         ]),
+                        Tab::make('Prontuário')->schema([
+                            Livewire::make(PatientMedicalRecordTable::class, [
+                                'patientId' => $this->getRecord()->id,
+                            ]),
+                        ]),
                     ])->columnSpanFull(),
             ]);
     }
