@@ -101,7 +101,7 @@ class FilamentRegister extends Register
             $data = $this->form->getState();
 
             $data = $this->mutateFormDataBeforeRegister($data);
-
+            $data['email_verified_at'] = now();
             $user = $this->handleRegistration($data);
 
             $this->form->model($user)->saveRelationships();
@@ -117,16 +117,9 @@ class FilamentRegister extends Register
 
         event(new Registered($user));
 
-        $user->sendEmailVerificationNotification();
+        Filament::auth()->login($user);
 
-        Notification::make()
-        ->success()
-        ->title(__('auth.flash.verify_email_message'))
-        ->send();
-
-        // Filament::auth()->login($user);
-
-        // session()->regenerate();
+        session()->regenerate();
 
         return app(RegistrationResponse::class);
     }
