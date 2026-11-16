@@ -16,6 +16,9 @@ class MedicalRecord extends Model
         'user_id',
         'title',
         'content',
+        'complaint',
+        'diagnostic_hypothesis',
+        'conduct',
     ];
 
     public function patient(): BelongsTo

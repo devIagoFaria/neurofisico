@@ -36,7 +36,15 @@ class PatientMedicalRecordTable extends TableWidget
                 TextColumn::make('title')
                     ->label('Título')
                     ->searchable(),
-
+                TextColumn::make('complaint')
+                    ->label('Queixa')
+                    ->html()
+                    ->formatStateUsing(
+                        fn (?string $state) =>
+                            e(strip_tags($state ?? ''))
+                    )
+                    ->limit(60)
+                    ->placeholder('Não informada'),
                 TextColumn::make('content')
                     ->label('Anotação')
                     ->limit(80),
@@ -76,6 +84,20 @@ class PatientMedicalRecordTable extends TableWidget
                             ->label('Anotação clínica')
                             ->required()
                             ->columnSpanFull(),
+                        RichEditor::make('complaint')
+                            ->label('Queixa')
+                            ->nullable()
+                            ->columnSpanFull(),
+
+                        RichEditor::make('diagnostic_hypothesis')
+                            ->label('Hipótese diagnóstica')
+                            ->nullable()
+                            ->columnSpanFull(),
+
+                        RichEditor::make('conduct')
+                            ->label('Conduta')
+                            ->nullable()
+                            ->columnSpanFull(),
                     ])
                     ->mutateDataUsing(function (array $data): array {
                         if (
@@ -114,6 +136,21 @@ class PatientMedicalRecordTable extends TableWidget
                             ->options(fn () => $this->appointmentOptions())
                             ->disabled(),
 
+                        RichEditor::make('complaint')
+                            ->label('Queixa')
+                            ->disabled()
+                            ->columnSpanFull(),
+
+                        RichEditor::make('diagnostic_hypothesis')
+                            ->label('Hipótese diagnóstica')
+                            ->disabled()
+                            ->columnSpanFull(),
+
+                        RichEditor::make('conduct')
+                            ->label('Conduta')
+                            ->disabled()
+                            ->columnSpanFull(),
+
                         RichEditor::make('content')
                             ->label('Anotação clínica')
                             ->disabled()
@@ -122,6 +159,9 @@ class PatientMedicalRecordTable extends TableWidget
                     ->fillForm(fn (MedicalRecord $record): array => [
                         'title' => $record->title,
                         'appointment_id' => $record->appointment_id,
+                        'complaint' => $record->complaint,
+                        'diagnostic_hypothesis' => $record->diagnostic_hypothesis,
+                        'conduct' => $record->conduct,
                         'content' => $record->content,
                     ]),
 
@@ -140,7 +180,20 @@ class PatientMedicalRecordTable extends TableWidget
                             ->label('Título')
                             ->required()
                             ->maxLength(255),
+                        RichEditor::make('complaint')
+                            ->label('Queixa')
+                            ->nullable()
+                            ->columnSpanFull(),
 
+                        RichEditor::make('diagnostic_hypothesis')
+                            ->label('Hipótese diagnóstica')
+                            ->nullable()
+                            ->columnSpanFull(),
+
+                        RichEditor::make('conduct')
+                            ->label('Conduta')
+                            ->nullable()
+                            ->columnSpanFull(),
                         RichEditor::make('content')
                             ->label('Anotação clínica')
                             ->required()
