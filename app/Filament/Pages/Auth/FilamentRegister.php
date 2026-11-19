@@ -57,7 +57,7 @@ class FilamentRegister extends Register
                     ->label(new HtmlString(
                         '<span class="ml-1">'
                         . __('auth.registration.i_agree') . ' '
-                        . '<a href="' . route('terms.conditions') . '" class="ml-1 underline">'
+                        . '<a href="https://www.neurofisico.com.br/termos-e-condicoes" class="ml-1 underline">'
                         . __('auth.registration.terms_and_condition')
                         . '</a>.'
                         . '</span>'
