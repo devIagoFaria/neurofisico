@@ -8,6 +8,6 @@ class RegistrationResponse implements BaseRegistrationResponse
 {
     public function toResponse($request)
     {
-        return redirect()->route('filament.auth.auth.login');
+        return redirect()->route('filament.patient.pages.dashboard');
     }
 }
