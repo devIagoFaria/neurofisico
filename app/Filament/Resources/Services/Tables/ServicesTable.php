@@ -12,7 +12,6 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Notifications\Notification;
 use Filament\Tables\Columns\ToggleColumn;
 use Illuminate\Contracts\Database\Query\Builder;
-use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
 
 class ServicesTable
 {
@@ -23,17 +22,12 @@ class ServicesTable
             ->recordAction(null)
             ->recordUrl(null)
             ->columns([
-                SpatieMediaLibraryImageColumn::make('icon')
-                    ->label(__('messages.front_service.icon'))
-                    ->circular()
-                    ->collection('icon')
-                    ->defaultImageUrl(asset('images/hospital-services.png')),
                 TextColumn::make('name')
                     ->label(__('messages.web.name'))
                     ->searchable()
                     ->sortable(),
                 TextColumn::make('category_id')
-                    ->label(__('messages.medicine.category'))
+                    ->label('Especialidade')
                     ->formatStateUsing(function ($record) {
                         return $record->serviceCategory->name;
                     })

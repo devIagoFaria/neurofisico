@@ -7,6 +7,7 @@ use App\Models\Doctor;
 use App\Models\Patient;
 use App\Models\Service;
 use App\Models\WeekDay;
+use App\Models\ServiceCategory;
 use Carbon\Carbon;
 use DateTime;
 use Filament\Forms\Components\DatePicker;
@@ -39,9 +40,7 @@ class AppointmentForm
         }
 
         // Get data for select fields
-        $doctors = Doctor::with('user')->get()->pluck('user.full_name', 'id')->toArray();
         $patients = Patient::whereHas('user',fn ($q) => $q->whereNotNull('email_verified_at'))->with('user')->get()->pluck('user.full_name', 'id')->toArray();
-        $services = Service::where('status', true)->pluck('name', 'id')->toArray();
 
         return $schema
             ->columns(1)
@@ -55,19 +54,101 @@ class AppointmentForm
                                     ->default(fn() => $loggedInDoctorId)
                                     ->visible(fn() => Auth::user()->hasRole('doctor'))
                                     ->reactive(),
+                                Select::make('category_id')
+                                    ->label('Especialidade:')
+                                    ->options(
+                                        fn () => ServiceCategory::query()
+                                            ->whereHas('activatedServices')
+                                            ->orderBy('name')
+                                            ->pluck('name', 'id')
+                                            ->toArray()
+                                    )
+                                    ->required()
+                                    ->searchable()
+                                    ->native(false)
+                                    ->live()
+                                    ->dehydrated(false)
+                                    ->afterStateUpdated(function (Set $set) {
+                                        $set('service_id', null);
+                                        $set('doctor_id', null);
+                                        $set('available_slot', null);
+                                        $set('from_time', null);
+                                        $set('to_time', null);
+                                        $set('charge', null);
+                                        $set('payable_amount', null);
+                                    }),
+
+                                Select::make('service_id')
+                                    ->label('Serviço:')
+                                    ->options(function (Get $get) {
+                                        $categoryId = $get('category_id');
+
+                                        if (! $categoryId) {
+                                            return [];
+                                        }
+
+                                        return Service::query()
+                                            ->where('category_id', $categoryId)
+                                            ->where('status', true)
+                                            ->orderBy('name')
+                                            ->pluck('name', 'id')
+                                            ->toArray();
+                                    })
+                                    ->disabled(fn (Get $get) => ! filled($get('category_id')))
+                                    ->required()
+                                    ->searchable()
+                                    ->native(false)
+                                    ->live()
+                                    ->afterStateUpdated(function (Set $set, $state) {
+                                        $set('doctor_id', null);
+                                        $set('available_slot', null);
+                                        $set('from_time', null);
+                                        $set('to_time', null);
+
+                                        $service = $state
+                                            ? Service::find($state)
+                                            : null;
+
+                                        $charge = $service?->charges;
+
+                                        $set('charge', $charge);
+                                        $set('payable_amount', $charge);
+                                    }),
 
                                 Select::make('doctor_id')
-                                    ->label(__('messages.doctor.doctor') . ':')
-                                    ->options($doctors)
+                                    ->label('Médico:')
+                                    ->options(function (Get $get) {
+                                        $serviceId = $get('service_id');
+
+                                        if (! $serviceId) {
+                                            return [];
+                                        }
+
+                                        $service = Service::with('serviceDoctors.user')
+                                            ->find($serviceId);
+
+                                        if (! $service) {
+                                            return [];
+                                        }
+
+                                        return $service->serviceDoctors
+                                            ->filter(fn ($doctor) => $doctor->user !== null)
+                                            ->mapWithKeys(fn ($doctor) => [
+                                                $doctor->id => $doctor->user->full_name,
+                                            ])
+                                            ->toArray();
+                                    })
+                                    ->disabled(fn (Get $get) => ! filled($get('service_id')))
                                     ->required()
                                     ->searchable()
                                     ->native(false)
                                     ->live()
                                     ->afterStateUpdated(function (Set $set) {
                                         $set('available_slot', null);
+                                        $set('from_time', null);
+                                        $set('to_time', null);
                                     })
-                                    ->hidden(fn($record) => Auth::user()->hasRole('doctor')),
-
+                                    ->hidden(fn () => Auth::user()->hasRole('doctor')),
                                 DatePicker::make('date')
                                     ->label(__('messages.appointment.date') . ':')
                                     ->placeholder(__('messages.appointment.date'))
@@ -80,30 +161,6 @@ class AppointmentForm
                                     })
                                     ->seconds(false),
 
-
-                                    Select::make('service_id')
-                                    ->label(__('messages.appointment.service') . ':')
-                                    ->options($services)
-                                    ->required()
-                                    ->searchable()
-                                    ->native(false)
-                                    ->live()
-                                    ->afterStateUpdated(function (Set $set, Get $get, ?int $state) {
-                                        $set('available_slot', null);
-
-                                        // Get the service charge and update the charge and payable amount fields
-                                        if ($state) {
-                                            $service = Service::find($state);
-                                            if ($service) {
-                                                $charge = $service->charges ?? 0;
-                                                $set('charge', $charge);
-                                                $set('payable_amount', $charge);
-                                            }
-                                        } else {
-                                            $set('charge', null);
-                                            $set('payable_amount', null);
-                                        }
-                                    }),
 
                                 Hidden::make('patient_id')
                                     ->default(fn() => $loggedInPatientId)

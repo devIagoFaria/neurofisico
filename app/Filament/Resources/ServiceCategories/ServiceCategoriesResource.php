@@ -42,7 +42,11 @@ class ServiceCategoriesResource extends Resource
 
     public static function getModelLabel(): string
     {
-        return __('messages.service_category.service_category');
+        return 'Especialidade';
+    }
+    public static function getPluralModelLabel(): string
+    {
+        return 'Especialidades';
     }
     public static function form(Schema $schema): Schema
     {

@@ -5,7 +5,6 @@ namespace App\Filament\Resources\Services\Schemas;
 use App\Models\Doctor;
 use App\Models\Service;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
@@ -27,11 +26,11 @@ class ServicesForm
                         ->required()
                         ->unique(Service::class, 'name', ignoreRecord: true),
                     Select::make('category_id')
-                        ->label(__('messages.service.category').':')
+                        ->label('Especialidade:')
                         ->required()
                         ->native(false)
                         ->relationship('serviceCategory', 'name')
-                        ->placeholder(__('messages.service.category'))
+                        ->placeholder('Selecione uma especialidade')
                         ->createOptionForm([
                             TextInput::make('name')
                                 ->label(__('messages.web.name').':')
@@ -72,12 +71,6 @@ class ServicesForm
                         ->required()
                         ->placeholder(__('messages.service.short_description'))
                         ->columnSpanFull(),
-                    SpatieMediaLibraryFileUpload::make('icon')
-                        ->label(__('messages.front_service.icon').':')
-                        ->image()
-                        ->avatar()
-                        ->collection('icon')
-                        ->required(),
                     Toggle::make('status')
                         ->label(__('messages.web.status').':')
                         ->inline(false),

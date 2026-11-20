@@ -37,7 +37,7 @@ return [
         'welcome' => 'Bem-vindo de volta',
         'sign_in_account' => 'Entre na sua conta para continuar',
         'dont_have_account' => 'Não tem uma conta?',
-        'create_account' => 'Criar uma conta',
+        'create_account' => 'Faça o seu Cadastro',
         'enter_email' => 'Digite seu e-mail',
         'enter_password' => 'Digite sua senha',
         'title' => 'Entre para iniciar sua sessão',
