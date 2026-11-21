@@ -79,9 +79,10 @@ class MySchedule extends Page implements HasForms
                         $slotData = [];
                         foreach ($slots as $slot) {
                             $slotData[] = [
-                                $dayName . '_start_time' => $slot->start_time . ' ' . $slot->start_time_type,
-                                $dayName . '_end_time' => $slot->end_time . ' ' . $slot->end_time_type,
+                                $dayName . '_start_time' => Carbon::parse($slot->start_time)->format('H:i'),
+                                $dayName . '_end_time' => Carbon::parse($slot->end_time)->format('H:i'),
                             ];
+                            
                         }
 
                         $formData['available'][$dayName] = !empty($slotData);
@@ -126,6 +127,7 @@ class MySchedule extends Page implements HasForms
                                 Select::make('session_meeting_time')
                                     ->label(__('messages.doctor_session.session_meeting_time') . ':')
                                     ->options([
+                                        '0' => '0 ' . __('messages.common.minutes'),
                                         '5' =>  '5' . ' ' . __('messages.common.minutes'),
                                         '10' => '10' . ' ' . __('messages.common.minutes'),
                                         '15' => '15' . ' ' . __('messages.common.minutes'),
@@ -146,12 +148,14 @@ class MySchedule extends Page implements HasForms
                 Section::make(__('messages.appointment.time_slot'))
                     ->schema([
                         Grid::make()
-                            ->columns(2)
+                            ->columns(1)
                             ->schema($this->getTimeSlotRepeaterSchema()
                         ),
                     ])
                     ->columnSpanFull(),
-            ])->statePath('data');
+            ])
+            ->disabled()
+            ->statePath('data');
     }
 
     private function getTimeSlotRepeaterSchema(): array
@@ -214,12 +218,6 @@ class MySchedule extends Page implements HasForms
 
                 return new HtmlString(
                     '<label class="flex items-center gap-2">
-                        <input type="checkbox"
-                            wire:click="toggleDay(\'' . $dayName . '\')"
-                            class="h-4 w-4"
-                            ' . $checked . '
-                            ' . $disabled . '
-                        />
                         <span>' . e($labelText) . '</span>
                     </label>'
                 );
@@ -246,8 +244,7 @@ class MySchedule extends Page implements HasForms
                     })
                     ->native(false)
                     ->searchable()
-                    ->required()
-                    ->columnSpan(5),
+                    ->required(),
                 Select::make("{$dayName}_end_time")
                     ->options(function (callable $get) use ($dayOfWeek) {
                         $clinicSchedule = ClinicSchedule::where('day_of_week', $dayOfWeek)->first();
@@ -270,21 +267,11 @@ class MySchedule extends Page implements HasForms
                     ->native(false)
                     ->searchable()
                     ->required()
-                    ->columnSpan(5),
+                    ->columnSpan(1),
             ])
-            ->compact()
-            ->table([
-                TableColumn::make(__('messages.doctor_session.start_time')),
-                TableColumn::make(__('messages.doctor_session.end_time')),
-            ])
-            ->extraAttributes([
-                'class' => 'custom-time-slot-repeater',
-            ])
-            ->columns(1)
-            ->collapsible()
-            ->defaultItems(function () use ($dayOfWeek) {
-                return ClinicSchedule::where('day_of_week', $dayOfWeek)->exists() ? 1 : 0;
-            })
+            ->columns(2)
+            ->deletable(true)
+            ->defaultItems(0)
             ->hintActions([
                 self::cloneDayAction(
                     sourceDay: $dayName,
@@ -300,6 +287,17 @@ class MySchedule extends Page implements HasForms
                     }),
             ])
             ->reorderable(false)
+            ->deletable(true)
+            ->addable(
+                fn (Repeater $component): bool =>
+                    $component->getItemsCount() === 0
+            )
+            ->deleteAction(
+                fn (Action $action) => $action
+                    ->icon('heroicon-o-trash')
+                    ->color('danger')
+                    ->tooltip('Excluir horário')
+            )
             ->addActionLabel(__('messages.common.add'));
     }
 
@@ -380,15 +378,12 @@ class MySchedule extends Page implements HasForms
 
     protected function getFormActions(): array
     {
-        return [
-            Action::make('save')
-                ->label(__('messages.common.save'))
-                ->action('save'),
-        ];
+        return [];
     }
 
     public function save(): void
     {
+        abort(403, 'Você não tem permissão para alterar sua programação.');
         $data = $this->form->getState();
 
         $authUser = Auth::user();

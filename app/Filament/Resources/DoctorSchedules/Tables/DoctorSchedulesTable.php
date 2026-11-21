@@ -21,7 +21,7 @@ class DoctorSchedulesTable
                 CustomIdentityColumn::make('doctor.user.first_name')
                     ->avatar(fn ($record) => $record->doctor->user->profile_image)
                     ->html()
-                    ->primary(fn ($record) => $record->doctor->user->full_name.' '.rating($record->doctor?->reviews?->avg('rating') ?? 0))
+                    ->primary(fn ($record) => $record->doctor->user->full_name)
                     ->primaryUrl(fn ($record) => DoctorResource::getUrl('view', ['record' => $record->doctor->user->id]))
                     ->label(__('messages.doctor.doctor'))
                     ->color('#2b7fff')

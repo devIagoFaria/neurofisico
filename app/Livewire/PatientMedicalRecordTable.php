@@ -15,6 +15,7 @@ use Illuminate\Validation\ValidationException;
 use Filament\Actions\Action;
 use Filament\Actions\EditAction;
 use Filament\Actions\DeleteAction;
+use Illuminate\Support\Facades\Gate;
 
 class PatientMedicalRecordTable extends TableWidget
 {
@@ -169,6 +170,14 @@ class PatientMedicalRecordTable extends TableWidget
                 EditAction::make()
                     ->label('Editar')
                     ->icon('heroicon-o-pencil-square')
+                    ->visible(
+                        fn (MedicalRecord $record): bool =>
+                            Gate::allows('update', $record)
+                    )
+                    ->before(
+                        fn (MedicalRecord $record) =>
+                            Gate::authorize('update', $record)
+                    )
                     ->schema([
                         Select::make('appointment_id')
                             ->label('Consulta')
@@ -228,6 +237,14 @@ class PatientMedicalRecordTable extends TableWidget
                     ->label('Excluir')
                     ->icon('heroicon-o-trash')
                     ->color('danger')
+                    ->visible(
+                        fn (MedicalRecord $record): bool =>
+                            Gate::allows('delete', $record)
+                    )
+                    ->before(
+                        fn (MedicalRecord $record) =>
+                            Gate::authorize('delete', $record)
+                    )
                     ->requiresConfirmation()
                     ->modalHeading('Excluir anotação')
                     ->modalDescription(

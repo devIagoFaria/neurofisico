@@ -49,4 +49,19 @@ class PatientResource extends Resource
             'view' => ViewPatient::route('/{record}'),
         ];
     }
+
+    public static function canEdit($record): bool
+    {
+        return false;
+    }
+
+    public static function canDelete($record): bool
+    {
+        return false;
+    }
+
+    public static function canDeleteAny(): bool
+    {
+        return false;
+    }
 }

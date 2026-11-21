@@ -41,7 +41,7 @@ class DoctorsTable
                 CustomIdentityColumn::make('first_name')
                     ->avatar(fn ($record) => $record->profile_image)
                     ->html()
-                    ->primary(fn ($record) => $record->full_name.' '.rating($record->doctor->reviews?->avg('rating') ?? 0))
+                    ->primary(fn ($record) => $record->full_name)
                     ->label(__('messages.doctor.doctor'))
                     ->color('#2b7fff')
                     ->toggleable(false)

@@ -699,4 +699,11 @@ class User extends Authenticatable implements FilamentUser, HasMedia, HasName, H
         );
     }
 
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection(self::PROFILE)
+            ->useDisk('public')
+            ->singleFile();
+    }
+
 }

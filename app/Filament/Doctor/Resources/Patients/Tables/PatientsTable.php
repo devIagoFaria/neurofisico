@@ -18,13 +18,7 @@ class PatientsTable
             ->filters([
                 //
             ])
-            ->recordActions([
-                EditAction::make()->hidden(fn () => auth()->user()?->hasRole('doctor')),
-            ])
-            ->toolbarActions([
-                BulkActionGroup::make([
-                    DeleteBulkAction::make(),
-                ]),
-            ]);
+            ->recordActions([])
+            ->toolbarActions([]);
     }
 }

@@ -59,14 +59,7 @@ class AppointmentsTable
                     CustomIdentityColumn::make('doctor.user.first_name')
                         ->avatar(fn ($record) => $record->doctor->user->profile_image)
                         ->html()
-                        ->primary(
-                            fn ($record) => $record->doctor->user->full_name.
-                                (
-                                    isRole('patient')
-                                    ? ''
-                                    : ' '.rating($record->doctor?->reviews?->avg('rating') ?? 0)
-                                )
-                        )
+                        ->primary(fn ($record) => $record->doctor->user->full_name)
                         ->primaryUrl(
                             fn ($record) => isRole('patient') ? null : DoctorResource::getUrl('view', ['record' => $record->doctor->user_id])
                         )

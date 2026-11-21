@@ -68,4 +68,22 @@ class PatientResource extends Resource
             'edit' => EditPatient::route('/{record}/edit'),
         ];
     }
+
+    public static function canEdit($record): bool
+    {
+        return ! auth()->user()?->hasRole('doctor')
+            && checkPermission('manage_patients');
+    }
+
+    public static function canDelete($record): bool
+    {
+        return ! auth()->user()?->hasRole('doctor')
+            && checkPermission('manage_patients');
+    }
+
+    public static function canDeleteAny(): bool
+    {
+        return ! auth()->user()?->hasRole('doctor')
+            && checkPermission('manage_patients');
+    }
 }

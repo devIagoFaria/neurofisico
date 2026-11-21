@@ -67,6 +67,7 @@ class DoctorScheduleForm
                                 Select::make('session_meeting_time')
                                     ->label(__('messages.doctor_session.session_meeting_time') . ':')
                                     ->options([
+                                        '0' =>  '0' . ' ' . __('messages.common.minutes'),
                                         '5' =>  '5' . ' ' . __('messages.common.minutes'),
                                         '10' => '10' . ' ' . __('messages.common.minutes'),
                                         '15' => '15' . ' ' . __('messages.common.minutes'),
@@ -87,7 +88,7 @@ class DoctorScheduleForm
                 Section::make(__('messages.appointment.time_slot'))
                     ->schema([
                         Grid::make()
-                            ->columns(2)
+                            ->columns(1)
                             ->schema([
                                 Hidden::make('available.monday')
                                     ->default(function () {
@@ -179,11 +180,8 @@ class DoctorScheduleForm
                                         TableColumn::make(__('messages.doctor_session.end_time')),
                                     ])
                                     ->columns(1)
-                                    ->collapsible()
-                                    ->defaultItems(function () {
-                                        // Only show default item if clinic schedule exists
-                                        return ClinicSchedule::where('day_of_week', 1)->exists() ? 1 : 0;
-                                    })
+                                    
+                                    ->defaultItems(0)
                                     ->hintActions([
                                         self::cloneDayAction(
                                             sourceDay: 'monday',
@@ -200,7 +198,7 @@ class DoctorScheduleForm
                                             }),
                                     ])
                                     ->reorderable(false)
-                                    ->deletable(false)
+                                    ->deletable(true)
                                     ->addActionLabel(__('messages.common.add')),
 
                                 Hidden::make('available.tuesday')
@@ -289,11 +287,8 @@ class DoctorScheduleForm
                                         TableColumn::make(__('messages.doctor_session.end_time')),
                                     ])
                                     ->columns(1)
-                                    ->collapsible()
-                                    ->defaultItems(function () {
-                                        // Only show default item if clinic schedule exists
-                                        return ClinicSchedule::where('day_of_week', 2)->exists() ? 1 : 0;
-                                    })
+                                    
+                                    ->defaultItems(0)
                                     ->hintActions([
                                         self::cloneDayAction(
                                             sourceDay: 'tuesday',
@@ -398,11 +393,8 @@ class DoctorScheduleForm
                                         TableColumn::make(__('messages.doctor_session.end_time')),
                                     ])
                                     ->columns(1)
-                                    ->collapsible()
-                                    ->defaultItems(function () {
-                                        // Only show default item if clinic schedule exists
-                                        return ClinicSchedule::where('day_of_week', 3)->exists() ? 1 : 0;
-                                    })
+                                    
+                                    ->defaultItems(0)
                                     ->hintActions([
                                         self::cloneDayAction(
                                             sourceDay: 'wednesday',
@@ -419,7 +411,7 @@ class DoctorScheduleForm
                                             }),
                                     ])
                                     ->reorderable(false)
-                                    ->deletable(false)
+                                    ->deletable(true)
                                     ->addActionLabel(__('messages.common.add')),
 
                                 Hidden::make('available.thursday')
@@ -508,11 +500,8 @@ class DoctorScheduleForm
                                         TableColumn::make(__('messages.doctor_session.end_time')),
                                     ])
                                     ->columns(1)
-                                    ->collapsible()
-                                    ->defaultItems(function () {
-                                        // Only show default item if clinic schedule exists
-                                        return ClinicSchedule::where('day_of_week', 4)->exists() ? 1 : 0;
-                                    })
+                                    
+                                    ->defaultItems(0)
                                     ->hintActions([
                                         self::cloneDayAction(
                                             sourceDay: 'thursday',
@@ -529,7 +518,7 @@ class DoctorScheduleForm
                                             }),
                                     ])
                                     ->reorderable(false)
-                                    ->deletable(false)
+                                    ->deletable(true)
                                     ->addActionLabel(__('messages.common.add')),
 
                                 Hidden::make('available.friday')
@@ -620,11 +609,8 @@ class DoctorScheduleForm
                                         TableColumn::make(__('messages.doctor_session.end_time')),
                                     ])
                                     ->columns(1)
-                                    ->collapsible()
-                                    ->defaultItems(function () {
-                                        // Only show default item if clinic schedule exists
-                                        return ClinicSchedule::where('day_of_week', 5)->exists() ? 1 : 0;
-                                    })
+                                    
+                                    ->defaultItems(0)
                                     ->hintActions([
                                         self::cloneDayAction(
                                             sourceDay: 'friday',
@@ -641,7 +627,7 @@ class DoctorScheduleForm
                                             }),
                                     ])
                                     ->reorderable(false)
-                                    ->deletable(false)
+                                    ->deletable(true)
                                     ->addActionLabel(__('messages.common.add')),
 
                                 Hidden::make('available.saturday')
@@ -730,11 +716,8 @@ class DoctorScheduleForm
                                         TableColumn::make(__('messages.doctor_session.end_time')),
                                     ])
                                     ->columns(1)
-                                    ->collapsible()
-                                    ->defaultItems(function () {
-                                        // Only show default item if clinic schedule exists
-                                        return ClinicSchedule::where('day_of_week', 6)->exists() ? 1 : 0;
-                                    })
+                                    
+                                    ->defaultItems(0)
                                     ->hintActions([
                                         self::cloneDayAction(
                                             sourceDay: 'saturday',
@@ -751,7 +734,7 @@ class DoctorScheduleForm
                                             }),
                                     ])
                                     ->reorderable(false)
-                                    ->deletable(false)
+                                    ->deletable(true)
                                     ->addActionLabel(__('messages.common.add')),
 
                                 Hidden::make('available.sunday')
@@ -840,11 +823,8 @@ class DoctorScheduleForm
                                         TableColumn::make(__('messages.doctor_session.end_time')),
                                     ])
                                     ->columns(1)
-                                    ->collapsible()
-                                    ->defaultItems(function () {
-                                        // Only show default item if clinic schedule exists
-                                        return ClinicSchedule::where('day_of_week', 0)->exists() ? 1 : 0;
-                                    })
+                                    
+                                    ->defaultItems(0)
                                     ->hintActions([
                                         self::cloneDayAction(
                                             sourceDay: 'sunday',
@@ -861,7 +841,7 @@ class DoctorScheduleForm
                                             }),
                                     ])
                                     ->reorderable(false)
-                                    ->deletable(false)
+                                    ->deletable(true)
                                     ->addActionLabel(__('messages.common.add')),
                             ]),
                     ])->columnSpanFull()

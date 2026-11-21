@@ -219,13 +219,20 @@ class DoctorForm
                                         ->maxLength(255)
                                         ->placeholder(__('messages.common.instagram_url')),
                                 ])->relationship('doctor'),
-                                // SpatieMediaLibraryFileUpload::make('profile')
-                                //     ->label(__('messages.doctor.profile') . ':')
-                                //     ->image()
-                                //     ->avatar()
-                                //     ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/jpg'])
-                                //     ->disk(config('app.media_disk'))
-                                //     ->collection(Staff::PROFILE),
+                                SpatieMediaLibraryFileUpload::make('profile')
+                                    ->label('Foto de perfil')
+                                    ->image()
+                                    ->avatar()
+                                    ->imageEditor()
+                                    ->acceptedFileTypes([
+                                        'image/jpeg',
+                                        'image/png',
+                                    ])
+                                    ->maxSize(2048)
+                                    ->disk('public')
+                                    ->collection(User::PROFILE)
+                                    ->imagePreviewHeight('150')
+                                    ->columnSpanFull(),
 
                                 Toggle::make('status')
                                     ->label(__('messages.doctor.status') . ':')
