@@ -211,173 +211,173 @@ class AppointmentsTable
                     //     ])
                     //     ->visible(fn () => isRole('doctor')),
 
-                    TextColumn::make('payment_type_text')
-                        ->label(__('messages.appointment.payment_status'))
-                        ->state(fn ($record) => $record->payment_type)
-                        ->extraAttributes([
-                            'class' => 'fi-badge px-2 py-1 text-black text-xs font-medium rounded-full max-w-[100px] text-center',
-                        ])
-                        ->formatStateUsing(fn ($state) => match ($state) {
-                            Appointment::PENDING => __('messages.transaction.pending'),
-                            Appointment::PAID => __('messages.transaction.paid'),
-                        })
-                        ->color(fn ($state) => match ($state) {
-                            Appointment::PENDING => 'danger',
-                            Appointment::PAID => 'success',
-                        })
-                        ->action(
-                            Action::make('pay_now')
-                                ->disabled(fn ($record) => $record->payment_type !== Appointment::PENDING)
-                                ->modal()
-                                ->modalHeading(__('messages.appointment.Select_payment_method'))
-                                ->modalSubmitActionLabel(__('messages.common.save'))
-                                ->modalCancelActionLabel(__('messages.common.cancel'))
-                                ->modalWidth('md')
-                                ->form([
-                                    Select::make('payment_gateway')
-                                        ->hiddenLabel()
-                                        ->options(getAllPaymentStatus())
-                                        // ->options(getPaymentGateway())
-                                        ->required()
-                                        ->native(false)
-                                        ->live(),
-                                ])
-                                ->action(function ($record, array $data, $action) {
+                    // TextColumn::make('payment_type_text')
+                    //     ->label(__('messages.appointment.payment_status'))
+                    //     ->state(fn ($record) => $record->payment_type)
+                    //     ->extraAttributes([
+                    //         'class' => 'fi-badge px-2 py-1 text-black text-xs font-medium rounded-full max-w-[100px] text-center',
+                    //     ])
+                    //     ->formatStateUsing(fn ($state) => match ($state) {
+                    //         Appointment::PENDING => __('messages.transaction.pending'),
+                    //         Appointment::PAID => __('messages.transaction.paid'),
+                    //     })
+                    //     ->color(fn ($state) => match ($state) {
+                    //         Appointment::PENDING => 'danger',
+                    //         Appointment::PAID => 'success',
+                    //     })
+                    //     ->action(
+                    //         Action::make('pay_now')
+                    //             ->disabled(fn ($record) => $record->payment_type !== Appointment::PENDING)
+                    //             ->modal()
+                    //             ->modalHeading(__('messages.appointment.Select_payment_method'))
+                    //             ->modalSubmitActionLabel(__('messages.common.save'))
+                    //             ->modalCancelActionLabel(__('messages.common.cancel'))
+                    //             ->modalWidth('md')
+                    //             ->form([
+                    //                 Select::make('payment_gateway')
+                    //                     ->hiddenLabel()
+                    //                     ->options(getAllPaymentStatus())
+                    //                     // ->options(getPaymentGateway())
+                    //                     ->required()
+                    //                     ->native(false)
+                    //                     ->live(),
+                    //             ])
+                    //             ->action(function ($record, array $data, $action) {
 
-                                    $paymentGatewayType = $data['payment_gateway'];
+                    //                 $paymentGatewayType = $data['payment_gateway'];
 
-                                    // Stripe
-                                    if ($paymentGatewayType === Appointment::STRIPE) {
-                                        try {
-                                            // Validate required data
-                                            if (empty($record->payable_amount) || $record->payable_amount <= 0) {
-                                                Notification::make()
-                                                    ->title(__('Invalid appointment amount'))
-                                                    ->danger()
-                                                    ->send();
+                    //                 // Stripe
+                    //                 if ($paymentGatewayType === Appointment::STRIPE) {
+                    //                     try {
+                    //                         // Validate required data
+                    //                         if (empty($record->payable_amount) || $record->payable_amount <= 0) {
+                    //                             Notification::make()
+                    //                                 ->title(__('Invalid appointment amount'))
+                    //                                 ->danger()
+                    //                                 ->send();
 
-                                                return;
-                                            }
+                    //                             return;
+                    //                         }
 
-                                            // Set Stripe API key
-                                            Stripe::setApiKey(getSettingValue('stripe_secret') ?? config('services.stripe.secret_key'));
+                    //                         // Set Stripe API key
+                    //                         Stripe::setApiKey(getSettingValue('stripe_secret') ?? config('services.stripe.secret_key'));
 
-                                            // Prepare line items
-                                            $currency = strtolower(getCurrencyCode());
-                                            $amount = in_array(strtoupper($currency), zeroDecimalCurrencies())
-                                                ? (int) $record->payable_amount
-                                                : (int) ($record->payable_amount * 100);
+                    //                         // Prepare line items
+                    //                         $currency = strtolower(getCurrencyCode());
+                    //                         $amount = in_array(strtoupper($currency), zeroDecimalCurrencies())
+                    //                             ? (int) $record->payable_amount
+                    //                             : (int) ($record->payable_amount * 100);
 
-                                            $session = StripeSession::create([
-                                                'mode' => 'payment',
-                                                'payment_method_types' => ['card'],
-                                                'line_items' => [
-                                                    [
-                                                        'price_data' => [
-                                                            'currency' => $currency,
-                                                            'unit_amount' => $amount,
-                                                            'product_data' => [
-                                                                'name' => 'Appointment #'.$record->id,
-                                                                'description' => 'Medical appointment payment',
-                                                                'metadata' => [
-                                                                    'appointment_id' => $record->id,
-                                                                    'doctor_id' => $record->doctor_id,
-                                                                    'patient_id' => $record->patient_id,
-                                                                ],
-                                                            ],
-                                                        ],
-                                                        'quantity' => 1,
-                                                    ],
-                                                ],
-                                                'metadata' => [
-                                                    'appointment_id' => $record->id,
-                                                    'patient_id' => $record->patient_id,
-                                                    'doctor_id' => $record->doctor_id,
-                                                ],
-                                                'customer_email' => $record->patient->user->email ?? null,
-                                                'success_url' => route('stripe.success').'?session_id={CHECKOUT_SESSION_ID}',
-                                                'cancel_url' => route('stripe.cancel'),
-                                                'expires_at' => time() + (30 * 60),
-                                            ]);
+                    //                         $session = StripeSession::create([
+                    //                             'mode' => 'payment',
+                    //                             'payment_method_types' => ['card'],
+                    //                             'line_items' => [
+                    //                                 [
+                    //                                     'price_data' => [
+                    //                                         'currency' => $currency,
+                    //                                         'unit_amount' => $amount,
+                    //                                         'product_data' => [
+                    //                                             'name' => 'Appointment #'.$record->id,
+                    //                                             'description' => 'Medical appointment payment',
+                    //                                             'metadata' => [
+                    //                                                 'appointment_id' => $record->id,
+                    //                                                 'doctor_id' => $record->doctor_id,
+                    //                                                 'patient_id' => $record->patient_id,
+                    //                                             ],
+                    //                                         ],
+                    //                                     ],
+                    //                                     'quantity' => 1,
+                    //                                 ],
+                    //                             ],
+                    //                             'metadata' => [
+                    //                                 'appointment_id' => $record->id,
+                    //                                 'patient_id' => $record->patient_id,
+                    //                                 'doctor_id' => $record->doctor_id,
+                    //                             ],
+                    //                             'customer_email' => $record->patient->user->email ?? null,
+                    //                             'success_url' => route('stripe.success').'?session_id={CHECKOUT_SESSION_ID}',
+                    //                             'cancel_url' => route('stripe.cancel'),
+                    //                             'expires_at' => time() + (30 * 60),
+                    //                         ]);
 
-                                            $record->update([
-                                                'payment_method' => Appointment::STRIPE,
-                                                'transaction_id' => $session->id,
-                                            ]);
-                                            session(['user_id' => getLogInUserId()]);
-                                            return redirect()->away($session->url);
-                                        } catch (\Exception $e) {
-                                            Log::error('Stripe payment error: '.$e->getMessage(), [
-                                                'appointment_id' => $record->id,
-                                                'patient_id' => $record->patient_id,
-                                                'amount' => $record->payable_amount,
-                                            ]);
-                                        }
-                                    }
+                    //                         $record->update([
+                    //                             'payment_method' => Appointment::STRIPE,
+                    //                             'transaction_id' => $session->id,
+                    //                         ]);
+                    //                         session(['user_id' => getLogInUserId()]);
+                    //                         return redirect()->away($session->url);
+                    //                     } catch (\Exception $e) {
+                    //                         Log::error('Stripe payment error: '.$e->getMessage(), [
+                    //                             'appointment_id' => $record->id,
+                    //                             'patient_id' => $record->patient_id,
+                    //                             'amount' => $record->payable_amount,
+                    //                         ]);
+                    //                     }
+                    //                 }
 
-                                    // PayPal
-                                    if ($paymentGatewayType === Appointment::PAYPAL) {
-                                        return redirect()->route('paypal.init', [
-                                            'appointmentId' => $record->id,
-                                        ]);
-                                    }
+                    //                 // PayPal
+                    //                 if ($paymentGatewayType === Appointment::PAYPAL) {
+                    //                     return redirect()->route('paypal.init', [
+                    //                         'appointmentId' => $record->id,
+                    //                     ]);
+                    //                 }
 
-                                    // Razorpay
-                                    if ($paymentGatewayType === Appointment::RAZORPAY) {
-                                        return redirect()->route('razorpay.init', [
-                                            'appointmentId' => $record->id,
-                                        ]);
-                                    }
+                    //                 // Razorpay
+                    //                 if ($paymentGatewayType === Appointment::RAZORPAY) {
+                    //                     return redirect()->route('razorpay.init', [
+                    //                         'appointmentId' => $record->id,
+                    //                     ]);
+                    //                 }
 
-                                    // Paystack
-                                    if ($paymentGatewayType === Appointment::PAYSTACK) {
-                                        if (! empty(getSettingValue('paystack_key')) && ! empty(getSettingValue('paystack_secret')) && ! empty(getSettingValue('paystack_enable'))) {
-                                            if (paystackCurrencySupports() == false) {
-                                                return Notification::make()
-                                                    ->title(__('messages.payment_method.paystack').' '.__('messages.flash.currency_not_supported'))
-                                                    ->danger()
-                                                    ->send();
+                    //                 // Paystack
+                    //                 if ($paymentGatewayType === Appointment::PAYSTACK) {
+                    //                     if (! empty(getSettingValue('paystack_key')) && ! empty(getSettingValue('paystack_secret')) && ! empty(getSettingValue('paystack_enable'))) {
+                    //                         if (paystackCurrencySupports() == false) {
+                    //                             return Notification::make()
+                    //                                 ->title(__('messages.payment_method.paystack').' '.__('messages.flash.currency_not_supported'))
+                    //                                 ->danger()
+                    //                                 ->send();
 
-                                            }
+                    //                         }
 
-                                            $paystackController = app(PaystackController::class);
-                                            $result = $paystackController->redirectToGateway($record);
+                    //                         $paystackController = app(PaystackController::class);
+                    //                         $result = $paystackController->redirectToGateway($record);
 
-                                            if (session('session_url')) {
-                                                return redirect()->away(session('session_url'));
-                                            } else {
-                                                return Notification::make()
-                                                    ->title(__('messages.payment_method.paystack').' '.__('messages.flash.something_went_wrong'))
-                                                    ->danger()
-                                                    ->send();
-                                            }
-                                        } else {
-                                            return Notification::make()
-                                                ->title(__('messages.payment_method.paystack').' '.__('messages.paypal.credentials_not_set'))
-                                                ->danger()
-                                                ->send();
-                                        }
-                                    }
+                    //                         if (session('session_url')) {
+                    //                             return redirect()->away(session('session_url'));
+                    //                         } else {
+                    //                             return Notification::make()
+                    //                                 ->title(__('messages.payment_method.paystack').' '.__('messages.flash.something_went_wrong'))
+                    //                                 ->danger()
+                    //                                 ->send();
+                    //                         }
+                    //                     } else {
+                    //                         return Notification::make()
+                    //                             ->title(__('messages.payment_method.paystack').' '.__('messages.paypal.credentials_not_set'))
+                    //                             ->danger()
+                    //                             ->send();
+                    //                     }
+                    //                 }
 
-                                    if ($paymentGatewayType === Appointment::AUTHORIZE) {
-                                        return redirect()->route('authorize.init', [
-                                            'appointmentId' => $record->id,
-                                        ]);
-                                    }
-                                    // For other payment methods, update the record directly
-                                    $record->update([
-                                        'payment_method' => $paymentGatewayType,
-                                        'payment_type' => Appointment::PAID,
-                                    ]);
+                    //                 if ($paymentGatewayType === Appointment::AUTHORIZE) {
+                    //                     return redirect()->route('authorize.init', [
+                    //                         'appointmentId' => $record->id,
+                    //                     ]);
+                    //                 }
+                    //                 // For other payment methods, update the record directly
+                    //                 $record->update([
+                    //                     'payment_method' => $paymentGatewayType,
+                    //                     'payment_type' => Appointment::PAID,
+                    //                 ]);
 
-                                    Notification::make()
-                                        ->title(__('messages.flash.payment_status_updated'))
-                                        ->success()
-                                        ->send();
-                                })
+                    //                 Notification::make()
+                    //                     ->title(__('messages.flash.payment_status_updated'))
+                    //                     ->success()
+                    //                     ->send();
+                    //             })
 
-                        )
-                        ->visible(fn () => isRole('admin') || isRole('clinic_admin')),
+                    //     )
+                    //     ->visible(fn () => isRole('admin') || isRole('clinic_admin')),
 
 
                     // TextColumn::make('payment_status')

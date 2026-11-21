@@ -51,6 +51,7 @@ class DoctorScheduleForm
                                 Select::make('session_gap')
                                     ->label(__('messages.doctor_session.session_gap') . ':')
                                     ->options([
+                                        '0' =>  '0' . ' ' . __('messages.common.minutes'),
                                         '5' =>  '5' . ' ' . __('messages.common.minutes'),
                                         '10' => '10' . ' ' . __('messages.common.minutes'),
                                         '15' => '15' . ' ' . __('messages.common.minutes'),
@@ -67,7 +68,6 @@ class DoctorScheduleForm
                                 Select::make('session_meeting_time')
                                     ->label(__('messages.doctor_session.session_meeting_time') . ':')
                                     ->options([
-                                        '0' =>  '0' . ' ' . __('messages.common.minutes'),
                                         '5' =>  '5' . ' ' . __('messages.common.minutes'),
                                         '10' => '10' . ' ' . __('messages.common.minutes'),
                                         '15' => '15' . ' ' . __('messages.common.minutes'),

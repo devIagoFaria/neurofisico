@@ -282,15 +282,23 @@ if (! function_exists('getSlotByGap')) {
 
     function getSlotByGap($startTime, $endTime, $gap = '15')
     {
+        $gap = (int) $gap;
+
+        if ($gap <= 0) {
+            $gap = 15;
+        }
+
         $period = new CarbonPeriod(
             $startTime,
-            $gap.' minutes',
+            $gap . ' minutes',
             $endTime
         );
+
         $slots = [];
+
         foreach ($period as $item) {
-            $time12 = $item->format('G:i');
-            $slots[$time12] = $time12;
+            $time = $item->format('G:i');
+            $slots[$time] = $time;
         }
 
         return $slots;

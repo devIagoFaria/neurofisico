@@ -79,8 +79,8 @@ class MySchedule extends Page implements HasForms
                         $slotData = [];
                         foreach ($slots as $slot) {
                             $slotData[] = [
-                                $dayName . '_start_time' => Carbon::parse($slot->start_time)->format('H:i'),
-                                $dayName . '_end_time' => Carbon::parse($slot->end_time)->format('H:i'),
+                                $dayName . '_start_time' => Carbon::parse($slot->start_time)->format('G:i'),
+                                $dayName . '_end_time' => Carbon::parse($slot->end_time)->format('G:i'),
                             ];
                             
                         }

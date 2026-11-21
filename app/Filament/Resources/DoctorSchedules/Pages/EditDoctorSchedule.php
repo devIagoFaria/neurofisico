@@ -62,9 +62,8 @@ class EditDoctorSchedule extends EditRecord
                 $slotData = [];
                 foreach ($slots as $slot) {
                     $slotData[] = [
-                        $dayName . '_start_time' => $slot->start_time,
-                        $dayName . '_end_time' => $slot->end_time,
-                        // $dayName.'_is_available' => true, // Assuming all loaded slots are available
+                        $dayName . '_start_time' => Carbon::parse($slot->start_time)->format('G:i'),
+                        $dayName . '_end_time' => Carbon::parse($slot->end_time)->format('G:i'),
                     ];
                     $data['available'][$dayName] = true;
                 }
